@@ -1,5 +1,8 @@
 <template>
-  <div class="wrapper">
+  <div
+    class="wrapper"
+    v-bind:style="{ background: 'url(' + bodobj + ')','background-repeat': 'no-repeat','background-size':'cover'}"
+  >
     <iframe
       class="iframe"
       name="weather_inc"
@@ -13,12 +16,14 @@
     ></iframe>
     <div class="head">
       <el-tabs :tab-position="tabPosition" class="tab">
-        <el-tab-pane v-for="(tabinfo, index) in tapvalue" :key="index" :label="tabinfo.lx.mc">
+        <el-tab-pane v-for="(tabinfo, index1) in tapvalue" :key="index1" :label="tabinfo.lx.mc">
           <div>
             <el-card
-              v-for="(info,index) in tabinfo.ljxx"
-              :key="index"
-              style="margin-left:10px"
+              @mouseenter.native="mouseOver(index1,index2)"
+              @mouseleave.native="mouseLeave(index1,index2)"
+              v-for="(info,index2) in tabinfo.ljxx"
+              :key="index2"
+              :style="info.style"
               class="infocard"
               shadow="hover"
             >
@@ -31,12 +36,15 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <img id="img5" src="../../static/img/fengche.png" class="fengche" title="换个背景" @click="changebj" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import * as sysTool from "@/assets/js/systemTool";
+import rotate from "@/assets/js/jquery.rotate.min";
+import $ from "jquery";
 export default {
   components: {},
   props: {},
@@ -47,7 +55,27 @@ export default {
       ip: "",
       area: "",
       brower: "",
-      os: ""
+      os: "",
+      bodobj: "",
+      active: "",
+      background: [
+        {
+          img: "http://img.infinitynewtab.com/InfinityWallpaper/4_15.jpg"
+        },
+        {
+          img: "http://img.infinitynewtab.com/wallpaper/2592.jpg"
+        },
+        {
+          img: "http://img.infinitynewtab.com/wallpaper/2693.jpg"
+        },
+        {
+          img: "http://img.infinitynewtab.com/wallpaper/2814.jpg"
+        },
+        {
+          img: "http://img.infinitynewtab.com/wallpaper/2634.jpg"
+        }
+      ],
+      sjs: ""
     };
   },
   watch: {},
@@ -55,15 +83,69 @@ export default {
   methods: {
     getLjxx: function() {
       // 为给定 ID 的 user 创建请求
-      axios.post("http://129.204.226.230:8080//hello/hello").then(res => {
+      axios.post("http://129.204.226.230:8080/hello/hello").then(res => {
         console.log(res);
+        for (var i = 0; i < res.data.length; i++) {
+          res.data[i].ljxx.forEach(item => {
+            item.style = "";
+          });
+        }
         this.tapvalue = res.data;
       });
+    },
+    backgroundImg: function() {
+      var sjsz = Math.ceil(Math.random() * this.background.length);
+      if (this.sjs == sjsz) {
+        if (sjsz > 1) {
+          sjsz = sjsz - 1;
+        } else {
+          sjsz = sjsz + 1;
+        }
+      }
+      this.sjs = sjsz;
+      this.bodobj = this.background[sjsz - 1].img;
+    },
+    mouseOver: function(index1, index2) {
+      let r, g, b;
+      r = Math.floor(Math.random() * 256);
+      g = Math.floor(Math.random() * 256);
+      b = Math.floor(Math.random() * 256);
+      this.tapvalue[index1].ljxx[index2].style =
+        "background-color:rgb(" +
+        r +
+        "," +
+        g +
+        "," +
+        b +
+        ");transform: scale(1);transition: all 0.5s linear;";
+    },
+
+    mouseLeave: function(index1, index2) {
+      this.tapvalue[index1].ljxx[index2].style = "";
+    },
+    bjxz: function() {
+      $("#img5").rotate(
+        {
+        angle: 0,
+        animateTo: 360,
+        callback: this.bjxz,
+        easing: function(x, t, b, c, d) {
+          // t: current time, b: begInnIng value, c: change In value, d: duration
+          return c * (t / d)+ b;
+        }
+      }
+      );
+    },
+    changebj: function() {
+      this.backgroundImg();
     }
   },
+  computed: {},
   created() {},
   mounted() {
     this.getLjxx();
+    this.backgroundImg();
+    this.bjxz();
   }
 };
 </script>
@@ -78,9 +160,8 @@ export default {
   background-position: center top;
   background-size: 100% 100%;
   overflow: hidden;
-  background-image: url("../../static/img/back.jpg");
-  //http://pic.netbian.com/uploads/allimg/170609/123945-1496983185ad61.jpg
 }
+
 .head {
   margin-top: 40px;
   color: aquamarine;
@@ -92,6 +173,7 @@ export default {
 .infocard {
   height: 100px;
   float: left;
+  margin-left: 10px;
   width: 100px;
   float: left;
   width: 154px;
@@ -101,16 +183,23 @@ export default {
   transform: scale(1);
   transition: all 1s linear;
 }
-.infocard :hover{
-  background-color:rgb(159, 250, 238);
-  transform: scale(1);
-  transition:all 0.5s linear
-}
+// .infocard :hover {
+//   background-color: rgb(159, 250, 238);
+//   transform: scale(1);
+//   transition: all 0.5s linear;
+// }
 .iframe {
   margin-top: 10px;
   background-color: rgb(176, 224, 238);
 }
-.el-tabs__item{
+.el-tabs__item {
   color: aliceblue;
+}
+.fengche {
+  width: 4%;
+  height: 8%;
+  float: right;
+  margin-right: 3%;
+  margin-top: 20px;
 }
 </style>

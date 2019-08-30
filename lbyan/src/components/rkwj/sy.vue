@@ -1,19 +1,24 @@
 <template>
   <div
     class="wrapper"
-    v-bind:style="{ background: 'url(' + bodobj + ')','background-repeat': 'no-repeat','background-size':'cover'}"
+    v-bind:style="{ background: 'url(' + bodobj + ')','background-repeat': 'no-repeat','background-size':'cover','background-attachment': 'fixed'
+}"
   >
+  <div class="drag">
     <iframe
       class="iframe"
       name="weather_inc"
       src="http://i.tianqi.com/index.php?c=code&id=111"
-      width="980"
+      width="64%"
       height="100"
       frameborder="0"
       marginwidth="0"
       marginheight="0"
       scrolling="no"
     ></iframe>
+    <div class="welcome">
+      <img src="http://129.204.226.230/images/rabbit.png" alt="">  <span >欢迎使用-LinksTools</span> 
+    </div>
     <div class="head">
       <el-tabs :tab-position="tabPosition" class="tab">
         <el-tab-pane v-for="(tabinfo, index1) in tapvalue" :key="index1" :label="tabinfo.lx.mc">
@@ -36,7 +41,9 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <img id="img5" src="../../static/img/fengche.png" class="fengche" title="换个背景" @click="changebj" />
+    <img id="img5" src="http://129.204.226.230/images/fengche.png" class="fengche" title="换个背景" @click="changebj" />
+  </div>
+
   </div>
 </template>
 
@@ -44,6 +51,7 @@
 import axios from "axios";
 import * as sysTool from "@/assets/js/systemTool";
 import rotate from "@/assets/js/jquery.rotate.min";
+import texiao from "@/assets/js/texiao";
 import $ from "jquery";
 export default {
   components: {},
@@ -60,19 +68,41 @@ export default {
       active: "",
       background: [
         {
-          img: "http://img.infinitynewtab.com/InfinityWallpaper/4_15.jpg"
+          img: "http://129.204.226.230/images/4_15.jpg"
         },
         {
-          img: "http://img.infinitynewtab.com/wallpaper/2592.jpg"
+          img: "http://129.204.226.230/images/2592.jpg"
         },
         {
-          img: "http://img.infinitynewtab.com/wallpaper/2693.jpg"
+          img: "http://129.204.226.230/images/2693.jpg"
         },
         {
-          img: "http://img.infinitynewtab.com/wallpaper/2814.jpg"
+          img: "http://129.204.226.230/images/2814.jpg"
         },
         {
-          img: "http://img.infinitynewtab.com/wallpaper/2634.jpg"
+          img: "http://129.204.226.230/images/2634.jpg"
+        },
+
+        {
+          img: "http://129.204.226.230/images/2358.jpg"
+        },
+        {
+          img: "http://129.204.226.230/images/3309.jpg"
+        },
+        {
+          img: "http://129.204.226.230/images/2173.jpg"
+        },
+        {
+          img: "http://129.204.226.230/images/3797.jpg"
+        },
+        {
+          img: "http://129.204.226.230/images/1596.jpg"
+        },
+        {
+          img: "http://129.204.226.230/images/965.jpg"
+        },
+        {
+          img: "http://129.204.226.230/images/4025.jpg"
         }
       ],
       sjs: ""
@@ -83,7 +113,7 @@ export default {
   methods: {
     getLjxx: function() {
       // 为给定 ID 的 user 创建请求
-      axios.post("http://129.204.226.230:8080/hello/hello").then(res => {
+      axios.post("/api/hello/hello").then(res => {
         console.log(res);
         for (var i = 0; i < res.data.length; i++) {
           res.data[i].ljxx.forEach(item => {
@@ -152,18 +182,16 @@ export default {
 <style lang="scss" scoped>
 @import "../../static/css/rlstyle.css";
 .wrapper {
-  width: 101.1%;
-  height: 795px;
-  margin-top: -60px;
-  margin-left: -10px;
-  background-repeat: no-repeat;
-  background-position: center top;
-  background-size: 100% 100%;
-  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
 }
-
 .head {
   margin-top: 40px;
+  width: 100%;
   color: aquamarine;
 }
 .tab {
@@ -174,20 +202,13 @@ export default {
   height: 100px;
   float: left;
   margin-left: 10px;
-  width: 100px;
-  float: left;
-  width: 154px;
+  width: 16%;
   margin-top: 10px;
   background-color: transparent;
   opacity: 0.75;
   transform: scale(1);
   transition: all 1s linear;
 }
-// .infocard :hover {
-//   background-color: rgb(159, 250, 238);
-//   transform: scale(1);
-//   transition: all 0.5s linear;
-// }
 .iframe {
   margin-top: 10px;
   background-color: rgb(176, 224, 238);
@@ -198,8 +219,18 @@ export default {
 .fengche {
   width: 4%;
   height: 8%;
-  float: right;
-  margin-right: 3%;
-  margin-top: 20px;
+  position:fixed;
+  bottom:80px;
+  right: 50px;
+}
+.welcome{
+  display: flex;
+    align-items: center;
+    width: 20%;
+    color: var(--theme);
+    cursor: pointer;
+    margin-left: 43%;
+    color: aliceblue;
+    font-size: 20px;
 }
 </style>

@@ -33,7 +33,7 @@
               shadow="hover"
             >
               <div style="width:100px;height:47px;">
-                <img :src="info.img" :alt="info.jj" style="width:100%;height:100%;" />
+                <img :src="info.img == ''?'http://129.204.226.230/images/20190903162138.png':info.img" :title="info.jj" style="width:100%;height:100%;" />
               </div>
               <a :href="info.url" target="_blank" :title="info.mc+'-'+info.jj">{{info.mc}}</a>
             </el-card>
@@ -103,7 +103,10 @@ export default {
         },
         {
           img: "http://129.204.226.230/images/4025.jpg"
-        }
+        },
+        {
+          img: "http://129.204.226.230/images/100623.jpg"
+        },
       ],
       sjs: ""
     };

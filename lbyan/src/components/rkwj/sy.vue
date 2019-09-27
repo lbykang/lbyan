@@ -1,48 +1,71 @@
 <template>
   <div
     class="wrapper"
-    v-bind:style="{ background: 'url(' + bodobj + ')','background-repeat': 'no-repeat','background-size':'cover','background-attachment': 'fixed'
+    v-bind:style="{ background: 'url(' + bodobj + ')','background-repeat': 'no-repeat','z-index':'-1','background-size':'cover','background-attachment': 'fixed'
 }"
   >
-  <div class="drag">
-    <iframe
-      class="iframe"
+      <!-- <iframe
+      class="tq"
       name="weather_inc"
-      src="http://i.tianqi.com/index.php?c=code&id=111"
-      width="64%"
-      height="100"
+      src="http://i.tianqi.com/index.php?c=code&id=82"
+      width="250"
+      height="500"
       frameborder="0"
       marginwidth="0"
       marginheight="0"
       scrolling="no"
-    ></iframe>
-    <div class="welcome">
-      <img src="http://129.204.226.230/images/rabbit.png" alt="">  <span >欢迎使用-LinksTools</span> 
+    ></iframe> -->
+    <div class="drag">
+      <iframe
+        class="iframe"
+        name="weather_inc"
+        src="http://i.tianqi.com/index.php?c=code&id=111"
+        width="64%"
+        height="100"
+        frameborder="0"
+        marginwidth="0"
+        marginheight="0"
+        scrolling="no"
+      ></iframe>
+
+      <div class="welcome">
+        <img src="http://129.204.226.230/images/rabbit.png" alt />
+        <span>欢迎使用-LinksTools</span>
+      </div>
+      <div class="head">
+        <el-tabs :tab-position="tabPosition" class="tab">
+          <el-tab-pane v-for="(tabinfo, index1) in tapvalue" :key="index1" :label="tabinfo.lx.mc">
+            <div>
+              <el-card
+                @mouseenter.native="mouseOver(index1,index2)"
+                @mouseleave.native="mouseLeave(index1,index2)"
+                v-for="(info,index2) in tabinfo.ljxx"
+                :key="index2"
+                :style="info.style"
+                class="infocard"
+                shadow="hover"
+              >
+                <div style="width:100px;height:47px;">
+                  <img
+                    :src="info.img == ''?'http://129.204.226.230/images/20190903162138.png':info.img"
+                    :title="info.jj"
+                    style="width:100%;height:100%;"
+                  />
+                </div>
+                <a :href="info.url" target="_blank" :title="info.mc+'-'+info.jj">{{info.mc}}</a>
+              </el-card>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <img
+        id="img5"
+        src="http://129.204.226.230/images/fengche.png"
+        class="fengche"
+        title="换个背景"
+        @click="changebj"
+      />
     </div>
-    <div class="head">
-      <el-tabs :tab-position="tabPosition" class="tab">
-        <el-tab-pane v-for="(tabinfo, index1) in tapvalue" :key="index1" :label="tabinfo.lx.mc">
-          <div>
-            <el-card
-              @mouseenter.native="mouseOver(index1,index2)"
-              @mouseleave.native="mouseLeave(index1,index2)"
-              v-for="(info,index2) in tabinfo.ljxx"
-              :key="index2"
-              :style="info.style"
-              class="infocard"
-              shadow="hover"
-            >
-              <div style="width:100px;height:47px;">
-                <img :src="info.img == ''?'http://129.204.226.230/images/20190903162138.png':info.img" :title="info.jj" style="width:100%;height:100%;" />
-              </div>
-              <a :href="info.url" target="_blank" :title="info.mc+'-'+info.jj">{{info.mc}}</a>
-            </el-card>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
-    <img id="img5" src="http://129.204.226.230/images/fengche.png" class="fengche" title="换个背景" @click="changebj" />
-  </div>
 
   </div>
 </template>
@@ -106,7 +129,7 @@ export default {
         },
         {
           img: "http://129.204.226.230/images/100623.jpg"
-        },
+        }
       ],
       sjs: ""
     };
@@ -157,17 +180,15 @@ export default {
       this.tapvalue[index1].ljxx[index2].style = "";
     },
     bjxz: function() {
-      $("#img5").rotate(
-        {
+      $("#img5").rotate({
         angle: 0,
         animateTo: 360,
         callback: this.bjxz,
         easing: function(x, t, b, c, d) {
           // t: current time, b: begInnIng value, c: change In value, d: duration
-          return c * (t / d)+ b;
+          return c * (t / d) + b;
         }
-      }
-      );
+      });
     },
     changebj: function() {
       this.backgroundImg();
@@ -222,18 +243,27 @@ export default {
 .fengche {
   width: 4%;
   height: 8%;
-  position:fixed;
-  bottom:80px;
+  position: fixed;
+  bottom: 80px;
   right: 50px;
 }
-.welcome{
+#cnzz_stat_icon_1278002297 {
+  position: fixed;
+  bottom: 80px;
+}
+.welcome {
   display: flex;
-    align-items: center;
-    width: 20%;
-    color: var(--theme);
-    cursor: pointer;
-    margin-left: 43%;
-    color: aliceblue;
-    font-size: 20px;
+  align-items: center;
+  width: 20%;
+  color: var(--theme);
+  cursor: pointer;
+  margin-left: 43%;
+  color: aliceblue;
+  font-size: 20px;
+}
+.tq {
+  position: fixed;
+  left: 0px;
+  top: 90px;
 }
 </style>

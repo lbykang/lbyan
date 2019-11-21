@@ -18,12 +18,6 @@ export default {
     }
   },
   mounted (){
-    // var _this = this;
-    // _this.minHeight = document.documentElement.clientHeight - 170;
-    // window.onresize = function(){
-    //   _this.minHeight = document.documentElement.clientHeight - 170;
-    // }
-    
   }
 }
 </script>

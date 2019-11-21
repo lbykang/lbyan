@@ -4,29 +4,36 @@
     v-bind:style="{ background: 'url(' + bodobj + ')','background-repeat': 'no-repeat','z-index':'-1','background-size':'cover','background-attachment': 'fixed'
 }"
   >
-      <!-- <iframe
-      class="tq"
-      name="weather_inc"
-      src="http://i.tianqi.com/index.php?c=code&id=82"
-      width="250"
-      height="500"
-      frameborder="0"
-      marginwidth="0"
-      marginheight="0"
-      scrolling="no"
-    ></iframe> -->
     <div class="drag">
-      <iframe
-        class="iframe"
-        name="weather_inc"
-        src="http://i.tianqi.com/index.php?c=code&id=111"
-        width="64%"
-        height="100"
-        frameborder="0"
-        marginwidth="0"
-        marginheight="0"
-        scrolling="no"
-      ></iframe>
+      <div class="headTab">
+        <iframe
+          class="iframe"
+          name="weather_inc"
+          src="http://i.tianqi.com/index.php?c=code&id=111"
+          width="64%"
+          height="100"
+          frameborder="0"
+          marginwidth="0"
+          marginheight="0"
+          scrolling="no"
+        ></iframe>
+        <div style="float: left;width: 20%; margin-top: 40px;">
+          <el-link @click="showLoginPopup" type="primary">登录</el-link>
+          <el-link type="primary">•</el-link>
+          <el-link @click="showRegisterPopup" type="primary">注册</el-link>
+        </div>
+      </div>
+
+      <div v-show="popup">
+        <!--这里是要展示的内容层-->
+        <div class="login">
+          <i class="el-icon-close icon_cancel" @click="closepopup"></i>
+          <register class="form_layout" v-if="register"></register>
+          <login class="form_layout" v-else></login>
+        </div>
+        <!--这里是半透明背景层-->
+        <div class="over"></div>
+      </div>
 
       <div class="welcome">
         <img src="http://129.204.226.230/images/rabbit.png" alt />
@@ -60,7 +67,7 @@
       </div>
       <img
         id="img5"
-        src="http://129.204.226.230/images/fengche.png"
+        src="http://129.204.226.230:8099/image/fengche.png"
         class="fengche"
         title="换个背景"
         @click="changebj"
@@ -76,11 +83,18 @@ import * as sysTool from "@/assets/js/systemTool";
 import rotate from "@/assets/js/jquery.rotate.min";
 import texiao from "@/assets/js/texiao";
 import $ from "jquery";
+import login from "@/components/user/login";
+import register from "@/components/user/register";
 export default {
-  components: {},
+  components: {
+    login: login,
+    register: register
+  },
   props: {},
   data() {
     return {
+      popup: false,
+      register: false,
       tabPosition: "left",
       tapvalue: [],
       ip: "",
@@ -91,44 +105,7 @@ export default {
       active: "",
       background: [
         {
-          img: "http://129.204.226.230/images/4_15.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/2592.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/2693.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/2814.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/2634.jpg"
-        },
-
-        {
-          img: "http://129.204.226.230/images/2358.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/3309.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/2173.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/3797.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/1596.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/965.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/4025.jpg"
-        },
-        {
-          img: "http://129.204.226.230/images/100623.jpg"
+          img: "http://129.204.226.230:8099/image/十元.jpg"
         }
       ],
       sjs: ""
@@ -137,9 +114,23 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    //打开活动规则页面
+    showLoginPopup() {
+      this.popup = true;
+    },
+    showRegisterPopup() {
+      this.popup = true;
+      this.register=true;
+    },
+    //关闭活动规则页面
+    closepopup() {
+      this.popup = false;
+      this.register=false;
+    },
+
     getLjxx: function() {
       // 为给定 ID 的 user 创建请求
-      axios.post("/api/hello/hello").then(res => {
+      axios.post("/api/index/getLinkDate").then(res => {
         console.log(res);
         for (var i = 0; i < res.data.length; i++) {
           res.data[i].ljxx.forEach(item => {
@@ -205,65 +196,37 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../static/css/rlstyle.css";
-.wrapper {
+@import "../../static/css/sy.css";
+
+.rule {
   position: absolute;
+  width: 0.82rem;
+  height: 0.36rem;
+  top: 0.08rem;
+  right: 0rem;
+  background: #111111;
+}
+.login {
+  position: fixed;
+  font-size: 24px;
+  height: 500px;
+  width: 700px;
+  background-color: rgb(207, 189, 189);
+  border-radius: 0.25rem;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.over {
+  position: fixed;
   width: 100%;
   height: 100%;
+  opacity: 0.7; //透明度为70%
+  filter: alpha(opacity=70);
   top: 0;
   left: 0;
-  overflow-y: auto;
-}
-.head {
-  margin-top: 40px;
-  width: 100%;
-  color: aquamarine;
-}
-.tab {
-  width: 63%;
-  margin-left: 20%;
-}
-.infocard {
-  height: 100px;
-  float: left;
-  margin-left: 10px;
-  width: 16%;
-  margin-top: 10px;
-  background-color: transparent;
-  opacity: 0.75;
-  transform: scale(1);
-  transition: all 1s linear;
-}
-.iframe {
-  margin-top: 10px;
-  background-color: rgb(176, 224, 238);
-}
-.el-tabs__item {
-  color: aliceblue;
-}
-.fengche {
-  width: 4%;
-  height: 8%;
-  position: fixed;
-  bottom: 80px;
-  right: 50px;
-}
-#cnzz_stat_icon_1278002297 {
-  position: fixed;
-  bottom: 80px;
-}
-.welcome {
-  display: flex;
-  align-items: center;
-  width: 20%;
-  color: var(--theme);
-  cursor: pointer;
-  margin-left: 43%;
-  color: aliceblue;
-  font-size: 20px;
-}
-.tq {
-  position: fixed;
-  left: 0px;
-  top: 90px;
+  z-index: 999;
+  background-color: #111111;
 }
 </style>
